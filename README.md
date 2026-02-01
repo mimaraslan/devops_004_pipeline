@@ -1,11 +1,13 @@
 # AWS
 
+### DevOps - Local
+![DevOps - Local.jpg](src/img/DevOps%20-%20Local.jpg)
 
+
+### DevOps - Cloud
 ![DevOps - Cloud.jpg](src/img/DevOps%20-%20Cloud.jpg)
 
-AWS kaynaklarının standart adres yolları
-
-ARN
+####  AWS kaynaklarının ARN standart adres yolları
 
 ```
 arn:aws:resource-groups:us-east-1:1111111:group/Arge_Departmani_Kaynaklari
