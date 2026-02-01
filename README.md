@@ -23,6 +23,7 @@ https://111122223333.signin.aws.amazon.com/console
 
 ---
 AWS ID yerine oluşturduğun bir FIRMA ADI ile giriş adresi
+
 FIRMA ADI : MurlindaSoft
 
 https://MurlindaSoft.signin.aws.amazon.com/console
@@ -47,7 +48,7 @@ Istanbul_34
 Trabzon_61
 Agri_004
 ```
----
+
 
 ---
 Amazon CLI - Setup
