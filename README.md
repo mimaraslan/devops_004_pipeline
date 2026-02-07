@@ -103,3 +103,67 @@ aws ec2 describe-instances
 
 PuTTY
 https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+
+
+
+==============================
+
+
+
+
+
+===== Makine 1 : My Jenkins Master =====
+
+Public IP numaralarını Elastic IP ile mutlaka sabitliyoruz!!!
+
+https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Addresses:
+
+
+
+
+
+MacOS üzerinden terminalden bağlantı için instances makineyi seç.
+Connect düğmesine bas.
+SSH client sekmesini aç.
+
+Terminalden  My-Ubuntu-Key.pem konumuna   git.
+
+chmod 400 "My-Ubuntu-Key.pem"
+
+ssh -i "My-Ubuntu-Key.pem" ubuntu@ec2-PUBLIC_IP.compute-1.amazonaws.com
+
+
+
+
+Windows üzerinden MobaXterm ile SSH bağlantısını kurduk.
+
+
+
+Makineyi güncelliyorum.
+
+sudo apt update
+
+sudo apt upgrade -y
+
+
+İç IP yerine makineye bir isim veriyoruz.
+
+sudo nano /etc/hostname
+
+Makinememizin adı: My-Jenkins-Master
+
+Ctrl + X'e bas.
+Onaylamak için Y tuşuna bas.
+En sonda da Enter'a bas.
+
+Makineyi yeniden başlatacağız.
+
+sudo reboot
+
+Ya da
+
+sudo init 6
+
+
+
+
