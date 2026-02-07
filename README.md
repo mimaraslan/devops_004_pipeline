@@ -1,11 +1,10 @@
 # AWS
 
 ### DevOps - Local
-![DevOps - Local.jpg](src/img/DevOps%20-%20Local.jpg)
-
+![DevOps Local.jpg](src/img/DevOps%20Local.jpg)
 
 ### DevOps - Cloud
-![DevOps - Cloud.jpg](src/img/DevOps%20-%20Cloud.jpg)
+![DevOps Cloud.jpg](src/img/DevOps%20Cloud.jpg)
 
 ####  AWS kaynaklarının ARN standart adres yolları
 
