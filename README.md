@@ -176,3 +176,151 @@ sudo init 6
 
 
 
+
+===========================
+
+EC2 -> Security Groups -> Inbound rules  -> Edit inbound rules
+8080 portunu erişime açıyoruz.
+
+======== Java'yı kuracağız. ===================
+
+Terminale sadece "java" yaz ve enter tuşuna bas. Açılan komutlardan 21. sürümü al.
+
+sudo apt install openjdk-21-jre-headless -y
+
+java --version
+
+
+======== Jenkins kuracağız. ===================
+
+https://www.jenkins.io/doc/book/installing/linux/
+
+
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+https://pkg.jenkins.io/debian/jenkins.io-2026.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+https://pkg.jenkins.io/debian binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins   -y
+
+
+
+sudo systemctl enable jenkins
+
+sudo systemctl start jenkins
+
+sudo systemctl status jenkins
+
+
+
+
+http://PUBLIC_IP:8080/login
+
+Bu adresin içindeki yazıyı terminalde göster.
+sudo cat  /var/lib/jenkins/secrets/initialAdminPassword
+
+
+Varsayılan kurulumları yap. O arada Git aracı da makineye otomatik olarak kurulacak.
+
+
+http://PUBLIC_IP:8080/manage/pluginManager/available
+
+Pipeline: Stage View bu eklentiyi kur.
+
+
+
+
+
+
+
+
+
+
+
+===== Makine 2 : My Jenkins Agent =====
+
+
+Public IP numaralarını Elastic IP ile mutlaka sabitliyoruz!!!
+
+https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Addresses:
+
+
+
+
+
+MacOS üzerinden terminalden bağlantı için instances makineyi seç.
+Connect düğmesine bas.
+SSH client sekmesini aç.
+
+Terminalden  My-Ubuntu-Key.pem konumuna   git.
+
+chmod 400 "My-Ubuntu-Key.pem"
+
+ssh -i "My-Ubuntu-Key.pem" ubuntu@ec2-PUBLIC_IP.compute-1.amazonaws.com
+
+
+
+
+Windows üzerinden MobaXterm ile SSH bağlantısını kurduk.
+
+
+
+Makineyi güncelliyorum.
+
+sudo apt update
+
+sudo apt upgrade -y
+
+
+İç IP yerine makineye bir isim veriyoruz.
+
+sudo nano /etc/hostname
+
+Makinememizin adı: My-Jenkins-Agent
+
+Ctrl + X'e bas.
+Onaylamak için Y tuşuna bas.
+En sonda da Enter'a bas.
+
+Makineyi yeniden başlatacağız.
+
+sudo reboot
+
+
+======== Java'yı kuracağız. ===================
+
+Terminale sadece "java" yaz ve enter tuşuna bas. Açılan komutlardan 21. sürümü al.
+
+sudo apt install openjdk-21-jre-headless -y
+
+java --version
+
+
+
+======== Docker'ı kuracağız. ===================
+
+Terminale sadece "docker" yaz ve enter tuşuna bas.
+
+Açılan komutlardan yararlanacağız.
+
+sudo apt  install docker.io  -y
+
+
+sudo groupadd docker
+
+sudo usermod -a -G docker $USER
+veya
+sudo usermod -aG docker $USER
+
+sudo reboot
+
+
+
+
+
+
+
+
+
+
