@@ -127,10 +127,14 @@ Connect düğmesine bas.
 SSH client sekmesini aç.
 
 Terminalden  My-Ubuntu-Key.pem konumuna   git.
-
+```
 chmod 400 "My-Ubuntu-Key.pem"
+```
 
+```
 ssh -i "My-Ubuntu-Key.pem" ubuntu@ec2-PUBLIC_IP.compute-1.amazonaws.com
+```
+
 
 
 
@@ -141,14 +145,17 @@ Windows üzerinden MobaXterm ile SSH bağlantısını kurduk.
 
 Makineyi güncelliyorum.
 
+```
 sudo apt update
 
 sudo apt upgrade -y
-
+```
 
 İç IP yerine makineye bir isim veriyoruz.
 
+```
 sudo nano /etc/hostname
+```
 
 Makinememizin adı: My-Jenkins-Master
 
@@ -158,12 +165,14 @@ En sonda da Enter'a bas.
 
 Makineyi yeniden başlatacağız.
 
+```
 sudo reboot
-
+```
 Ya da
 
+```
 sudo init 6
-
+```
 
 
 
