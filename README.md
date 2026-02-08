@@ -690,3 +690,142 @@ sonarqube   -   nproc    4096
 ```
 :wq  yaz
 ```
+
+
+
+
+```
+sudo vim /etc/sysctl.conf
+```
+Bir şey eklemek için önce klavyeden i tuşuna bas.
+Eklenecek bilgi aşağıdaki satır.
+```
+vm.max_map_count = 262144
+```
+
+Çıkış için ESC tuşuna bas.
+:wq  yaz
+
+
+Makineyi yeniden başlat.
+
+sudo init 6
+
+OR
+```
+sudo reboot
+```
+
+
+
+
+
+==== Sonarqube kurulumu  =====
+```
+pwd
+
+cd /opt
+
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-26.2.0.119303.zip
+
+
+sudo apt install unzip
+
+
+sudo unzip sonarqube-26.2.0.119303.zip -d/opt
+
+pwd
+
+sudo mv   /opt/sonarqube-26.2.0.119303    /opt/sonarqube
+```
+
+
+
+sonar kullanıcı oluşturulacak ve haklar verilecek
+
+```
+sudo groupadd sonar
+
+sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
+
+sudo chown sonar:sonar /opt/sonarqube -R
+```
+
+
+veritabanıyla bu kullanıcıyı konuştur
+```
+sudo vim /opt/sonarqube/conf/sonar.properties
+```
+
+```
+sonar.jdbc.username=sonar
+sonar.jdbc.password=sonar
+
+
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+```
+
+
+
+
+
+
+
+Sonar servisini oluşturacağız.
+
+```
+sudo vim /etc/systemd/system/sonar.service
+```
+
+Aşağıdaki kodları olduğu gibi bu dosyanın içine yapıştır.
+
+
+```
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonar
+Group=sonar
+Restart=always
+
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+
+Makine açıldığında sonarqube otomatik olarak çalıştırma komutları
+
+```
+sudo systemctl enable sonar
+
+sudo systemctl start sonar
+
+sudo systemctl status sonar
+```
+
+
+
+
+=== Log takibi ===
+```
+sudo tail -f /opt/sonarqube/logs/sonar.log
+```
+
+Makinenin public ip değerini al ve 9000 portundan giriş yap.
+kullanıcı: admin
+parola: admin
+
+
+Yeni parola: Adana_01Adana_01
+
