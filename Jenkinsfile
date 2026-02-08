@@ -10,7 +10,7 @@ pipeline {
 
 	   stage('GitHub') {
             steps {
-                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops_003_pipeline']])
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops_004_pipeline']])
             }
         }
 
@@ -18,9 +18,9 @@ pipeline {
             steps {
             script {
                     if (isUnix()) {
-                        sh "mvn test"
+                        sh "mvn test"   // Linux ve MacOS için
                     } else {
-                        bat "mvn test"
+                        bat "mvn test"  // Windows için
                     }
                 }
             }
@@ -38,6 +38,9 @@ pipeline {
             }
 	 }
 
+
+
+/*
         stage('Docker Image') {
             steps {
                  script {
@@ -93,6 +96,9 @@ pipeline {
                 echo "Makinemdeki fazlalık imageları temizle."
             }
         }
+
+     */
+
 
     }
 }
