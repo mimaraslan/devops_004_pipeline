@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     tools {
         maven 'Maven3'
         jdk 'Java21'
@@ -10,19 +9,31 @@ pipeline {
 
         stage('Clean Workspace') {
             steps {
-                cleanWs() // Çalışma alanını temizle
+                cleanWs()
             }
         }
 
-	   stage('SCM GitHub') {
+        stage('SCM GitHub') {
             steps {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops_004_pipeline']])
             }
         }
 
+        stage('Build Maven') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh "mvn clean install"
+                    } else {
+                        bat "mvn clean install"
+                    }
+                }
+            }
+        }
+
         stage('Test Maven') {
             steps {
-            script {
+                script {
                     if (isUnix()) {
                         sh "mvn test"   // Linux ve MacOS için
                     } else {
@@ -32,23 +43,10 @@ pipeline {
             }
         }
 
-	 stage('Build Maven') {
-            steps {
-            script {
-                    if (isUnix()) {
-                        sh "mvn clean install"
-                    } else {
-                        bat "mvn clean install"
-                    }
-                }
-            }
-	 }
-
-
-     stage('SonarQube') {
+        stage('SonarQube') {
             steps {
                 script {
-                 withSonarQubeEnv(credentialsId: 'TOKEN_ID_SONARQUBE') {
+                    withSonarQubeEnv(credentialsId: 'TOKEN_ID_SONARQUBE') {
                         if (isUnix()) {
                             sh "mvn sonar:sonar"
                         } else {
@@ -59,9 +57,7 @@ pipeline {
             }
         }
 
-
-
-/*
+        /*
         stage('Docker Image') {
             steps {
                  script {
@@ -119,7 +115,5 @@ pipeline {
         }
 
      */
-
-
     }
 }
