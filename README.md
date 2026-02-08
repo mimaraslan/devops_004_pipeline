@@ -829,3 +829,11 @@ parola: admin
 
 Yeni parola: Adana_01Adana_01
 
+Jenkins içinde tokenı kaydettir.
+
+Pluginleri kur.
+
+Sonar'ın kurulduğu makinenin Private IPv4 addresses değerini kopayla.
+
+http://PUBLIC_IP:8080/
+
