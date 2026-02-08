@@ -14,13 +14,13 @@ pipeline {
             }
         }
 
-	   stage('GitHub') {
+	   stage('SCM GitHub') {
             steps {
                 checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/mimaraslan/devops_004_pipeline']])
             }
         }
 
-        stage('Test') {
+        stage('Test Maven') {
             steps {
             script {
                     if (isUnix()) {
@@ -43,6 +43,28 @@ pipeline {
                 }
             }
 	 }
+
+
+	 // SonarQube
+     stage('SonarQube') {
+            steps {
+                script {
+
+                echo "SonarQube ile kod kalitesini analiz et."
+
+               /*  withSonarQubeEnv('SonarQube') {
+
+                        if (isUnix()) {
+                            sh "mvn sonar:sonar -Dsonar.projectKey=devops-application -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin"
+                        } else {
+                            bat "mvn sonar:sonar -Dsonar.projectKey=devops-application -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin"
+                        }
+
+                    }
+                    */
+                }
+            }
+        }
 
 
 

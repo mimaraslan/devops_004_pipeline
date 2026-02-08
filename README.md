@@ -495,3 +495,198 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 
 
 
+
+
+
+
+===== GitHub Token ======
+
+
+MyGitHubTokenAWS
+ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
+Jenkins'e tanıttık.
+
+==============================
+
+
+
+===== Makine 3:  SonarQube Sunucusu ========
+
+Public IP numaralarını Elastic IP ile mutlaka sabitliyoruz!!!
+
+https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Addresses:
+
+
+
+
+
+MacOS üzerinden terminalden bağlantı için instances makineyi seç.
+Connect düğmesine bas.
+SSH client sekmesini aç.
+
+Terminalden  My-Ubuntu-Key.pem konumuna   git.
+```
+chmod 400 "My-Ubuntu-Key.pem"
+
+ssh -i "My-Ubuntu-Key.pem" ubuntu@ec2-PUBLIC_IP.compute-1.amazonaws.com
+```
+
+
+
+Windows üzerinden MobaXterm ile SSH bağlantısını kurduk.
+
+
+
+Makineyi güncelliyorum.
+```
+sudo apt update
+
+sudo apt upgrade -y
+```
+
+İç IP yerine makineye bir isim veriyoruz.
+```
+sudo nano /etc/hostname
+```
+
+Makinememizin adı: My-SonarQube
+
+Ctrl + X'e bas.
+Onaylamak için Y tuşuna bas.
+En sonda da Enter'a bas.
+
+Makineyi yeniden başlatacağız.
+```
+sudo reboot
+```
+
+Makineyi yeniden başlatmadan bu komutu da kullanabiliriz.
+```
+sudo hostnamectl set-hostname My-SonarQube --static
+```
+
+
+
+
+
+======== Java'yı kuracağız. ===================
+
+Terminale sadece "java" yaz ve enter tuşuna bas. Açılan komutlardan 21. sürümü al.
+```
+sudo apt install openjdk-21-jre-headless -y
+
+java --version
+```
+
+
+
+
+
+
+
+====  PostgreSQL kurulumu  =====
+```
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+
+
+
+sudo apt update
+
+sudo apt-get -y install postgresql postgresql-contrib
+
+
+
+sudo systemctl enable postgresql
+
+
+
+sudo passwd postgres
+```
+parola: 123456789
+
+
+
+
+```
+su - postgres
+```
+parola: 123456789
+```
+createuser sonar
+
+psql
+
+ALTER USER sonar WITH ENCRYPTED password 'sonar';
+
+CREATE DATABASE sonarqube OWNER sonar;
+
+
+GRANT ALL PRIVILEGES ON DATABASE sonarqube TO sonar;
+
+veya
+
+grant all privileges on DATABASE sonarqube to sonar;
+
+
+\q
+
+exit
+```
+
+
+
+
+
+
+
+Burada bunu kurmayacağız. İhtitaç durumuda Ubuntu'ya repolar ekleriz.
+==== Adoptium repository ====
+```
+sudo bash
+
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
+
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+
+
+
+sudo apt update
+
+
+sudo apt install openjdk-17-jre -y
+```
+OR
+```
+sudo apt install temurin-17-jdk -y
+
+
+sudo update-alternatives --config java
+
+java --version
+```
+
+
+
+
+=== Linux kernel  ===
+
+```
+sudo nano /etc/security/limits.conf
+```
+veya
+```
+sudo vim /etc/security/limits.conf
+```
+Bir şey eklemek için önce klavyeden i tuşuna bas.
+```
+sonarqube   -   nofile   65536
+sonarqube   -   nproc    4096
+```
+
+çıkış için ESC tuşuna bas.
+```
+:wq  yaz
+```
