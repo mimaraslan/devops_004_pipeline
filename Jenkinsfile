@@ -45,23 +45,16 @@ pipeline {
 	 }
 
 
-	 // SonarQube
      stage('SonarQube') {
             steps {
                 script {
-
-                echo "SonarQube ile kod kalitesini analiz et."
-
-               /*  withSonarQubeEnv('SonarQube') {
-
+                 withSonarQubeEnv(credentialsId: 'TOKEN_ID_SONARQUBE') {
                         if (isUnix()) {
-                            sh "mvn sonar:sonar -Dsonar.projectKey=devops-application -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin"
+                            sh "mvn sonar:sonar"
                         } else {
-                            bat "mvn sonar:sonar -Dsonar.projectKey=devops-application -Dsonar.host.url=http://localhost:9000 -Dsonar.login=admin -Dsonar.password=admin"
+                            bat "mvn sonar:sonar"
                         }
-
                     }
-                    */
                 }
             }
         }
