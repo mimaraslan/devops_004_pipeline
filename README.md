@@ -837,3 +837,150 @@ Sonar'ın kurulduğu makinenin Private IPv4 addresses değerini kopayla.
 
 http://PUBLIC_IP:9000
 
+
+
+
+
+### === Docker ====
+Docker'ı Jenkins'e tanıttık.
+
+DockerHub'a gidip Token oluşturuyoruz.
+
+
+https://hub.docker.com/
+
+Personal access tokens
+
+MyDockerHubTokenAWS
+
+dckr_pat_DDDDDDDDDDDDDDDDDDDDDDD
+
+
+```
+docker login -u mimaraslan  -p  dckr_pat_DDDDDDDDDDDDDDDDDDDDDDD
+```
+
+
+
+
+### ===== Makine 4 : My EKS Server =====
+
+
+Public IP numaralarını Elastic IP ile mutlaka sabitliyoruz!!!
+
+https://us-east-1.console.aws.amazon.com/ec2/home?region=us-east-1#Addresses:
+
+
+
+MacOS üzerinden terminalden bağlantı için instances makineyi seç.
+Connect düğmesine bas.
+SSH client sekmesini aç.
+
+Terminalden  My-Ubuntu-Key.pem konumuna   git.
+
+```
+chmod 400 "My-Ubuntu-Key.pem"
+```
+
+```
+ssh -i "My-Ubuntu-Key.pem" ubuntu@ec2-PUBLIC_IP.compute-1.amazonaws.com
+```
+
+
+Windows üzerinden MobaXterm ile SSH bağlantısını kurduk.
+
+
+
+Makineyi güncelliyorum.
+
+```
+sudo apt update
+
+sudo apt upgrade -y
+```
+
+İç IP yerine makineye bir isim veriyoruz.
+
+```
+sudo nano /etc/hostname
+```
+
+Makinememizin adı: My-EKS-Server
+
+Ctrl + X'e bas.
+
+Onaylamak için Y tuşuna bas.
+
+En sonda da Enter'a bas.
+
+
+Makineyi yeniden başlatacağız.
+
+```
+sudo reboot
+```
+
+
+
+Bu adrese gidiyoruz. AWS CLI'yı bu makineye kuracağım.
+
+
+
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+```
+sudo apt install unzip
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws --version
+```
+
+
+
+
+Python'u da kurduk.
+```
+sudo apt install python3-pip -y
+```
+
+
+Kubernetes ile konuşabilmemiz için kubectl kurmamız gerekiyor.
+
+https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html
+
+
+```
+sudo su
+
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.5/2025-11-13/bin/linux/amd64/kubectl
+
+ll
+
+
+chmod +x ./kubectl
+
+ll
+
+
+mv kubectl /bin
+
+
+kubectl version --output=yaml
+```
+
+---------------------------------
+
+Önce makineye Admin yetkisi verdik.
+https://us-east-1.console.aws.amazon.com/iam/home?region=us-east-1#/roles
+
+## EKS kurmak
+```
+eksctl create cluster --name my-workspace-cluster \
+--region us-east-1 \
+--node-type c5ad.large \
+--nodes 2 
+```
+
