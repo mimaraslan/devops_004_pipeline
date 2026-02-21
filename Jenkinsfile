@@ -5,9 +5,24 @@ pipeline {
         jdk 'Java21'
     }
 
+
+    environment {
+          APP_NAME = "devops-application"
+          RELEASE = "1.0.${env.BUILD_NUMBER}"
+          DOCKER_USER = "mimaraslan"
+          DOCKER_PASS = 'TOKEN_ID_DOCKER'
+          IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+          IMAGE_TAG  = "${IMAGE_NAME}:${RELEASE}"
+
+      //    docker build  -t  mimaraslan/devops-application   :  latest     .
+    }
+
+
+
+
     stages {
 
-        stage('Clean Workspace') {
+        stage() {
             steps {
                 cleanWs()
             }
@@ -57,7 +72,7 @@ pipeline {
             }
         }
 
-        /*
+
         stage('Docker Image') {
             steps {
                  script {
@@ -70,6 +85,8 @@ pipeline {
             }
         }
 
+
+/*
         stage('DockerHub') {
             steps {
                 echo "Image DockerHub'a gönder."
