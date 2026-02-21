@@ -12,7 +12,7 @@ pipeline {
           DOCKER_USER = "mimaraslan"
           DOCKER_PASS = 'TOKEN_ID_DOCKER'
           IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
-          IMAGE_TAG  = "${IMAGE_NAME}:${RELEASE}"
+          IMAGE_TAG  = "${RELEASE}"
 
       //    docker build  -t  mimaraslan/devops-application   :  latest     .
     }
@@ -22,8 +22,8 @@ pipeline {
 
     stages {
 
-        stage() {
-            steps {
+        stage('Clean Workspace') {
+                steps {
                 cleanWs()
             }
         }
@@ -46,6 +46,8 @@ pipeline {
             }
         }
 
+
+/*
         stage('Test Maven') {
             steps {
                 script {
@@ -71,8 +73,12 @@ pipeline {
                 }
             }
         }
+   */
 
 
+
+
+/*
         stage('Docker Image') {
             steps {
                  script {
@@ -85,8 +91,24 @@ pipeline {
             }
         }
 
+*/
+
+    stage('Docker Build Image & Push DockerHub') {
+            steps {
+                 script {
+                     docker.withRegistry('', DOCKER_PASS) {
+                         myDockerImage  =  docker.build "${IMAGE_NAME}"
+                         myDockerImage.push("${IMAGE_TAG}")
+                         myDockerImage.push("latest")
+                     }
+                }
+            }
+        }
+
+
 
 /*
+
         stage('DockerHub') {
             steps {
                 echo "Image DockerHub'a gönder."
@@ -106,7 +128,25 @@ pipeline {
 
             }
         }
+*/
 
+
+// ODEV
+/*
+   stage('Docker DockerHub') {
+            steps {
+                 script {
+                     docker.withRegistry('', DOCKER_PASS) {
+                         docker.build(IMAGE_TAG)
+                     }
+                }
+            }
+        }
+*/
+
+
+
+/*
         stage('Kubernetes (K8s)') {
             steps {
                  script {
@@ -116,7 +156,10 @@ pipeline {
 
             }
         }
+ */
 
+
+ /*
        stage('Clean') {
             steps {
 
@@ -127,10 +170,38 @@ pipeline {
                         bat "docker image prune -f"
                     }
                 }
-                echo "Makinemdeki fazlalık imageları temizle."
+
+            }
+        }
+ */
+
+
+
+        stage('Cleanup Old Docker Images') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        // Bu repo için tüm image’leri al, tarihe göre sırala, son 3 hariç sil
+                        sh """
+                            docker images "${env.IMAGE_NAME}" --format "{{.Repository}}:{{.Tag}} {{.CreatedAt}}" \\
+                            | sort -r -k2 \\
+                            | tail -n +4 \\
+                            | awk '{print \$1}' \\
+                            | xargs -r docker rmi -f
+                        """
+
+                    } else {
+                        bat """
+                             for /f "skip=3 tokens=1" %%i in ('docker images ${env.IMAGE_NAME} --format "{{.Repository}}:{{.Tag}}" ^| sort') do docker rmi -f %%i
+                        """
+                    }
+                }
             }
         }
 
-     */
+
+
+
+
     }
 }
