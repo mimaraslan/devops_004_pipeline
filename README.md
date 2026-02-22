@@ -971,6 +971,44 @@ mv kubectl /bin
 kubectl version --output=yaml
 ```
 
+
+
+
+### eksctl kurulumu
+
+Web Sayfası
+
+https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html#linux_amd64_kubectl
+```
+sudo su
+
+pwd
+
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C   /tmp
+
+cd /tmp
+
+ll
+
+sudo   mv    /tmp/eksctl     /bin
+
+eksctl version
+```
+
+
+
+```
+sudo reboot
+```
+
+
+```
+kubectl version --client
+```
+
+
+
+
 ---------------------------------
 
 Önce makineye Admin yetkisi verdik.
