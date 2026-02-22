@@ -1022,3 +1022,86 @@ eksctl create cluster --name my-workspace-cluster \
 --nodes 2 
 ```
 
+
+```
+sudo reboot
+```
+
+
+```
+kubectl get nodes
+
+kubectl get pods
+```
+
+
+
+
+
+### ArgoCD
+
+
+Web Sayfası
+https://argo-cd.readthedocs.io/en/stable/getting_started/
+
+```
+kubectl create namespace argocd
+
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+kubectl get pods -n argocd
+```
+
+
+Yönetici moduna geç.
+```
+sudo su
+
+pwd
+```
+
+
+
+ArgoCD sürümünü çekeceğiz.
+
+
+Son sürümü çekmek için bu 3 satır gerekli.
+
+```
+curl -L -s https://raw.githubusercontent.com/argoproj/argo-cd/stable/VERSION
+
+VERSION=$(curl -L -s https://raw.githubusercontent.com/argoproj/argo-cd/stable/VERSION)
+
+curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v$VERSION/argocd-linux-amd64
+```
+
+
+Duruma göre berlirli bir sürüme ihtiyacınız olursa bunu kullanın. Yukarıda 3 komut en güncel sürümü çeker.
+```
+curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.12.3/argocd-linux-amd64
+```
+
+Çalıştırma hakkını aldım.
+```
+chmod +x /usr/local/bin/argocd
+```
+
+
+Normal kullanıcı moduna geç. Terminale bunu yaz.
+```
+exit
+```
+
+```
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+kubectl get svc -n argocd
+```
+
+ArgoCD dış dünyaya böyle bir adres ile açılıyor.
+
+a5b3d196d6343444dbd692184429ca6b-117814533.us-east-1.elb.amazonaws.com 
+
+
+ 
+ 
