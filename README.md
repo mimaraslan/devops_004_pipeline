@@ -1103,5 +1103,45 @@ ArgoCD dış dünyaya böyle bir adres ile açılıyor.
 a5b3d196d6343444dbd692184429ca6b-117814533.us-east-1.elb.amazonaws.com 
 
 
- 
+
+
+
+
+
+### EKS nodelarını silme
+
+https://docs.aws.amazon.com/eks/latest/userguide/delete-cluster.html
+```
+eksctl version
+```
+Çalışan tüm servisleri listele
+```
+kubectl get svc --all-namespaces
+```
+
+Sadece bir servisi silmek için bu komutu kullanıyoruz ama servisleri tek tek silmeyeceğiz.
+```
+kubectl delete svc SERVISIN_ADI
+```
+
+
+Cluster adını ve detaylarını görmek için
+```
+kubectl config view
+```
+
+Silmeden önce konumu belirtmek lazım.
+```
+export AWS_DEFAULT_REGION=us-east-2
+```
+
+Nodeları ve servislerin hepsini cluster adını vererek toplu halde sileceğiz.
+```
+eksctl delete cluster --name my-workspace2-cluster
+```
+
+
+
+
+
  
