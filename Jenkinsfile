@@ -227,6 +227,18 @@ pipeline {
 
 
 
+        stage("Trigger GitOps ArgoCD Pipeline") {
+            steps {
+                script {
+                    sh "curl -v -k --user mimaraslan:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-100-49-167-117.compute-1.amazonaws.com:8080/job/devops_004_pipeline_gitops/buildWithParameters?token=GITOPS_TRIGGER_START'"
+                }
+            }
+        }
+
+
+
+
+
 
 
     }
